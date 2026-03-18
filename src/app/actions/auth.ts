@@ -1,8 +1,8 @@
 'use server'
 
 import axios from "axios"
-import { UserType } from "../_types/user"
 import { redirect } from "next/navigation"
+import { deleteSessionCookie, setSessionCookie } from "../_lib/session"
 
 const API_URL = 'http://localhost:3001'
 
@@ -26,6 +26,7 @@ export const LoginAction = async (formData: FormData) => {
         if (!user) {
             throw new Error('Invalid credentials')
         }
+        await setSessionCookie({name: user.name, email: user.email, id: user.id})
 
         redirect(`/`)
         
@@ -35,7 +36,8 @@ export const LoginAction = async (formData: FormData) => {
     }
 }
 
-export const logout = async ()=>{
+export const LogoutAction = async ()=>{
     // Clear session or cookie here
+    await deleteSessionCookie()
     redirect('/login')  
 }
