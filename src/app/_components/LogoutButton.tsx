@@ -1,8 +1,24 @@
-import React from 'react'
+'use client'
+
+import { useRouter } from "next/navigation"
+import { LogoutAction } from "../actions/auth"
 
 const LogoutButton = () => {
+  const router=  useRouter()
+  const HandleLogout = async ()=> {
+    try {
+      await LogoutAction()
+      router.push('/login')
+      router.refresh()
+    } catch (error) {
+      console.log("Logout failed", error)
+    }
+    
+  }
   return (
-    <button>LogoutButton</button>
+    <button className="px-4 py-2 bg-red-500 text-white
+     rounded-md transition-colors hover:bg-red-700 cursor-pointer"
+      onClick={HandleLogout}>LogoutButton</button>
   )
 }
 
