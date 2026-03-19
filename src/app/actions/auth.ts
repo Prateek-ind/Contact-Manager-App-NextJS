@@ -3,6 +3,7 @@
 import axios from "axios"
 import { redirect } from "next/navigation"
 import { deleteSessionCookie, setSessionCookie } from "../_lib/session"
+import {  UserType } from "../_types/user"
 
 const API_URL = 'http://localhost:3001'
 
@@ -18,7 +19,7 @@ export const LoginAction = async (formData: FormData) => {
 
         // 👉 filter manually
         const user = response.data.find(
-            (u: any) => u.email === email && u.password === password
+            (u: UserType) => u.email === email && u.password === password
         )
 
         console.log("MATCHED USER:", user)
