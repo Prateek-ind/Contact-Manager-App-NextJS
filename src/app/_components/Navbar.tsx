@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic"
 import Link from 'next/link'
 import LogoutButton from './LogoutButton'
 import { getSessionCookie } from '../_lib/session';
