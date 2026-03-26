@@ -1,0 +1,31 @@
+{
+  "contacts": [
+    {
+      "id": "1",
+      "name": "Rahul Misra",
+      "email": "rahul@test.com",
+      "userId": "1"
+    },
+    {
+      "id": "290a",
+      "name": "Prateek",
+      "email": "test@test.com",
+      "userId": "1"
+    },
+    {
+      "id": "0382",
+      "name": "Amit",
+      "email": "Amit@test.com",
+      "userId": "1"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "name": "user1",
+      "email": "user1@test.com",
+      "password": "123456"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
