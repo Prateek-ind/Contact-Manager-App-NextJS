@@ -1,20 +1,28 @@
 const userModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const generateToken = (userId) => {
-  return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: "1d" });
+  try {
+    if (!JWT_SECRET) {
+      throw new Error("JWT_SECRET missing");
+    }
+
+    return jwt.sign({ id: userId }, JWT_SECRET, {
+      expiresIn: "1d",
+    });
+  } catch (error) {
+    throw new Error("Token generation failed");
+  }
 };
 
 //register user
 
 exports.register = async (req, res) => {
-    console.log(JWT_SECRET)
   try {
     const { name, email, password } = req.body;
-
-    
 
     const existingUser = await userModel.findOne({ email });
 
@@ -23,8 +31,6 @@ exports.register = async (req, res) => {
         message: "Email already in use",
       });
     }
-
-   
 
     const user = await userModel.create({ name, email, password });
 
@@ -52,7 +58,7 @@ exports.login = async (req, res) => {
 
     //find by email
 
-    const user = await userModel.findOne({email});
+    const user = await userModel.findOne({ email });
     if (!user) {
       return res.status(401).json({
         message: "Invalid credentials",
@@ -74,7 +80,7 @@ exports.login = async (req, res) => {
       message: "Successful login",
       token,
       user: {
-        _id: user.id,
+        _id: user._id,
         name: user.name,
         email: user.email,
       },
