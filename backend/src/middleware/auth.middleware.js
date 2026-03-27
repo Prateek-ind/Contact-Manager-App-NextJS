@@ -2,12 +2,15 @@ const jwt = require("jsonwebtoken");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-const protect = async (req, res, next) => {
+const protect = (req, res, next) => {
   try {
+    if (!JWT_SECRET) {
+      throw new Error("JWT_SECRET missing");
+    }
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      res.status(401).json({
+      return res.status(401).json({
         message: "No token provided",
       });
     }
@@ -21,7 +24,7 @@ const protect = async (req, res, next) => {
     next();
   } catch (error) {
     res.status(401).json({
-      message: "Invalid token",
+      message: "UnAuthorized",
     });
   }
 };
