@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
       userId: req.userId,
     });
     if (!contact) {
-     return res.status(400).json({ message: "Unable to create contact" });
+      return res.status(400).json({ message: "Unable to create contact" });
     }
 
     res.status(201).json({
@@ -29,7 +29,7 @@ router.get("/", async (req, res) => {
     const contacts = await Contact.find({ userId: req.userId });
 
     if (!contacts) {
-     return res.status(400).json({ message: "Unable to create contact" });
+      return res.status(400).json({ message: "Unable to create contact" });
     }
 
     res.status(200).json({
@@ -42,12 +42,12 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  const {id} = req.params
+  const { id } = req.params;
   try {
-    const contact = await Contact.findById(id);
+    const contact = await Contact.findById({_id: id, userId: req.userId});
 
     if (!contact) {
-     return res.status(404).json({
+      return res.status(404).json({
         message: "Contact not found",
       });
     }
@@ -64,12 +64,17 @@ router.patch("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
+    const updatedContact = await Contact.findOneAndUpdate(
+      {_id: id, userId: req.userId},
+    req.body,
+    {new: true}
+    );
 
-    if (!updatedContact) {
-     return res.status(400).json({ message: "Error updating contact" });
+
+     if (!updatedContact) {
+      return res.status(404).json({
+        message: "Contact not found or unauthorized",
+      });
     }
 
     res.status(200).json({
